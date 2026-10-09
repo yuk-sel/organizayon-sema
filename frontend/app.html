@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organizasyon Şeması</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- ÜST BAR -->
+    <header class="top-bar">
+        <div class="logo">Organizasyon Şeması</div>
+
+        <div class="search-area">
+            <input type="text" id="searchInput" placeholder="Kişi ara...">
+            <button type="button" id="searchBtn" class="secondary-btn">Ara</button>
+        </div>
+
+        <div class="top-actions">
+            <button type="button" id="pdfBtn" class="secondary-btn">PDF İndir</button>
+            <button type="button" id="newPersonBtn" class="primary-btn">+ Yeni Kişi Ekle</button>
+        </div>
+    </header>
+
+    <!-- SAYFA SEKMELERİ -->
+    <nav class="tabs-bar">
+        <div class="tabs" id="sayfaSekmeleri"></div>
+
+        <div class="tab-actions">
+            <button type="button" id="newPageBtn" class="secondary-btn">+ Yeni Sayfa</button>
+            <button type="button" id="renamePageBtn" class="secondary-btn">Adı Değiştir</button>
+            <button type="button" id="autoLayoutBtn" class="secondary-btn">Otomatik Düzenle</button>
+            <button type="button" id="deletePageBtn" class="danger-btn">Sayfayı Sil</button>
+        </div>
+    </nav>
+
+    <!-- ŞEMA ALANI -->
+    <main class="main-content">
+        <div class="canvas-wrapper">
+            <div class="canvas" id="kisiCanvas">
+                <!-- Çizgiler (kutuların arkasında) -->
+                <svg id="cizgiKatmani" xmlns="http://www.w3.org/2000/svg" width="4000" height="2500" viewBox="0 0 4000 2500"></svg>
+
+                <!-- Kutular buraya JS ile eklenecek -->
+                <div id="kisiListesi" class="people-container"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- YENİ KİŞİ FORMU -->
+    <section id="personFormSection" class="form-section">
+        <div class="form-header">
+            <h2>Yeni Kişi</h2>
+            <button type="button" id="closePersonFormBtn" class="close-btn">×</button>
+        </div>
+
+        <form id="personForm">
+            <div class="form-group">
+                <label for="inputName">İsim</label>
+                <input type="text" id="inputName" name="isim" placeholder="Kişinin adı" required>
+            </div>
+
+            <div class="form-group">
+                <label for="inputEmail">Email <span class="isteke-bagli">(isteğe bağlı)</span></label>
+                <input type="email" id="inputEmail" name="email" placeholder="ornek@email.com">
+            </div>
+
+            <div class="form-group">
+                <label for="inputTitle">Ünvan</label>
+                <input type="text" id="inputTitle" name="unvan" placeholder="Örneğin: Müdür" required>
+            </div>
+
+            <div class="form-group foto-group">
+                <label>Fotoğraf <span class="isteke-bagli">(isteğe bağlı)</span></label>
+                <div class="foto-secici">
+                    <div class="avatar avatar-onizleme" id="inputPhotoPreview">?</div>
+                    <div class="foto-butonlar">
+                        <label class="secondary-btn foto-sec-btn" for="inputPhoto">Fotoğraf Seç</label>
+                        <input type="file" id="inputPhoto" accept="image/*" hidden>
+                        <button type="button" class="link-btn" id="inputPhotoRemove">Fotoğrafı kaldır</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" id="cancelPersonFormBtn" class="secondary-btn">İptal</button>
+                <button type="submit" id="savePersonBtn" class="primary-btn">Kişiyi Kaydet</button>
+            </div>
+        </form>
+    </section>
+
+    <!-- DÜZENLEME MODALI -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Kişiyi Düzenle</h2>
+                <button type="button" id="closeEditModalBtn" class="close-btn">×</button>
+            </div>
+
+            <form id="editPersonForm">
+                <input type="hidden" id="editPersonId">
+
+                <div class="form-group">
+                    <label for="editName">İsim</label>
+                    <input type="text" id="editName" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="editEmail">Email <span class="isteke-bagli">(isteğe bağlı)</span></label>
+                    <input type="email" id="editEmail">
+                </div>
+
+                <div class="form-group">
+                    <label for="editTitle">Ünvan</label>
+                    <input type="text" id="editTitle" required>
+            </div>
+
+            <div class="form-group foto-group">
+                <label>Fotoğraf <span class="isteke-bagli">(isteğe bağlı)</span></label>
+                <div class="foto-secici">
+                    <div class="avatar avatar-onizleme" id="editPhotoPreview">?</div>
+                    <div class="foto-butonlar">
+                        <label class="secondary-btn foto-sec-btn" for="editPhoto">Fotoğraf Seç</label>
+                        <input type="file" id="editPhoto" accept="image/*" hidden>
+                        <button type="button" class="link-btn" id="editPhotoRemove">Fotoğrafı kaldır</button>
+                    </div>
+                </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" id="cancelEditBtn" class="secondary-btn">İptal</button>
+                    <button type="submit" id="saveEditBtn" class="primary-btn">Değişiklikleri Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ALT KİŞİ EKLEME MODALI -->
+    <div id="childPersonModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Alt Kişi Ekle</h2>
+                <button type="button" id="closeChildModalBtn" class="close-btn">×</button>
+            </div>
+
+            <form id="childPersonForm">
+                <input type="hidden" id="parentPersonId">
+
+                <div class="form-group">
+                    <label for="childName">İsim</label>
+                    <input type="text" id="childName" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="childEmail">Email <span class="isteke-bagli">(isteğe bağlı)</span></label>
+                    <input type="email" id="childEmail">
+                </div>
+
+                <div class="form-group">
+                    <label for="childTitle">Ünvan</label>
+                    <input type="text" id="childTitle" required>
+            </div>
+
+            <div class="form-group foto-group">
+                <label>Fotoğraf <span class="isteke-bagli">(isteğe bağlı)</span></label>
+                <div class="foto-secici">
+                    <div class="avatar avatar-onizleme" id="childPhotoPreview">?</div>
+                    <div class="foto-butonlar">
+                        <label class="secondary-btn foto-sec-btn" for="childPhoto">Fotoğraf Seç</label>
+                        <input type="file" id="childPhoto" accept="image/*" hidden>
+                        <button type="button" class="link-btn" id="childPhotoRemove">Fotoğrafı kaldır</button>
+                    </div>
+                </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" id="cancelChildBtn" class="secondary-btn">İptal</button>
+                    <button type="submit" id="saveChildBtn" class="primary-btn">Alt Kişiyi Ekle</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- SAYFA ADI MODALI (yeni sayfa ve yeniden adlandırma) -->
+    <div id="pageModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="pageModalTitle">Yeni Sayfa</h2>
+                <button type="button" id="closePageModalBtn" class="close-btn">×</button>
+            </div>
+
+            <form id="pageForm">
+                <div class="form-group">
+                    <label for="pageName">Sayfa adı</label>
+                    <input type="text" id="pageName" placeholder="Örneğin: İnsan Kaynakları" maxlength="100" required>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" id="cancelPageBtn" class="secondary-btn">İptal</button>
+                    <button type="submit" id="savePageBtn" class="primary-btn">Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- PDF kütüphaneleri (internet bağlantısı gerekir) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <script src="assets/js/kisiEkleme.js"></script>
+
+</body>
+</html>
