@@ -69,7 +69,9 @@ Kendi PostgreSQL veritabanınızı oluşturduktan sonra, projedeki `schema.sql` 
 psql "$DATABASE_URL" -f schema.sql
 
 ```
-*(Dosya farklı bir dizindeyse komutta ilgili dosya yolunu belirttiğinizden emin olun).*
+> *(Dosya farklı bir dizindeyse komutta ilgili dosya yolunu belirttiğinizden emin olun).*
+
+
 5. **Uygulamayı Başlatın:**
 ```bash
 node backend/server/src/app.js
