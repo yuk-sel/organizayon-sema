@@ -90,5 +90,3 @@ Uygulama başarıyla başlatıldığında belirlediğiniz `PORT` üzerinden (Var
 Uygulamanın veritabanı bağlantısı tamamen `.env` dosyası üzerinden kontrol edilir. Farklı bir PostgreSQL veritabanına geçmek veya canlı ortama (production) dağıtım yapmak için `.env` dosyasındaki `DATABASE_URL` değerini güncellemeniz ve hedef veritabanında `schema.sql` dosyasını bir kez çalıştırmanız yeterlidir.
 
 ---
-
-```
