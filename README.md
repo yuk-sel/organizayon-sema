@@ -43,7 +43,7 @@ Sisteminizde aşağıdaki araçların kurulu olduğundan emin olun:
    git clone https://github.com/yuk-sel/organizayon-sema.git
    cd organizayon-sema
 
-```
+   ```
 
 2. **Bağımlılıkları Yükleyin:**
 ```bash
@@ -60,8 +60,6 @@ DATABASE_URL=postgresql://kullanici_adi:sifre@localhost:5432/veritabani_adi
 JWT_SECRET=sizin_guvenli_ve_rastgele_jwt_anahtariniz
 
 ```
-
-
 > 💡 **Not:** `DATABASE_URL` değerini kendi PostgreSQL erişim bilgilerinizle değiştirin. `JWT_SECRET` için karmaşık ve rastgele bir metin belirleyin.
 
 
@@ -71,8 +69,6 @@ Kendi PostgreSQL veritabanınızı oluşturduktan sonra, projedeki `schema.sql` 
 psql "$DATABASE_URL" -f schema.sql
 
 ```
-
-
 *(Dosya farklı bir dizindeyse komutta ilgili dosya yolunu belirttiğinizden emin olun).*
 5. **Uygulamayı Başlatın:**
 ```bash
